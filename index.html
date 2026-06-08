@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Tracking Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Task Tracking Dashboard</h1>
+    <p class="small-text">Track tasks, daily goals, daily work done, and completion percentage.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+    <button class="tab-btn" data-tab="tasks">Tasks</button>
+    <button class="tab-btn" data-tab="goals">Goals for Today</button>
+    <button class="tab-btn" data-tab="updates">Daily Work Update</button>
+  </div>
+
+  <div class="container">
+    <section id="dashboard" class="tab-content active">
+      <div class="summary-grid">
+        <div class="card">
+          <h3>Total Tasks</h3>
+          <h2 id="totalTasks">0</h2>
+        </div>
+        <div class="card">
+          <h3>Average Completion</h3>
+          <h2 id="averageCompletion">0%</h2>
+        </div>
+        <div class="card">
+          <h3>Goals Today</h3>
+          <h2 id="totalGoals">0</h2>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Task Completion Overview</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Owner</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Completion</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tasks" class="tab-content">
+      <div class="card">
+        <h2>Add New Task</h2>
+        <input id="taskName" placeholder="Task name" />
+        <textarea id="taskDescription" placeholder="Task description"></textarea>
+        <input id="taskOwner" placeholder="Person responsible" />
+        <input id="taskDeadline" type="date" />
+        <select id="taskStatus">
+          <option>Not Started</option>
+          <option>In Progress</option>
+          <option>Pending Support</option>
+          <option>Completed</option>
+        </select>
+        <button class="primary" id="addTaskBtn">Add Task</button>
+      </div>
+
+      <div class="card">
+        <h2>Task List</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="taskTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="goals" class="tab-content">
+      <div class="card">
+        <h2>Add Goal for Today</h2>
+        <input id="goalText" placeholder="Example: Complete supplier follow-up for Project A" />
+        <button class="primary" id="addGoalBtn">Add Goal</button>
+      </div>
+
+      <div class="card">
+        <h2>Today's Goals</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Goal</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="goalTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="updates" class="tab-content">
+      <div class="card">
+        <h2>Input Work Done Today</h2>
+        <select id="updateTask"></select>
+        <input id="updatePercent" type="number" min="0" max="100" placeholder="Completion percentage, example: 60" />
+        <textarea id="updateNotes" placeholder="Work done today / latest update"></textarea>
+        <button class="primary" id="saveUpdateBtn">Save Update</button>
+      </div>
+
+      <div class="card">
+        <h2>Daily Work History</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Task</th>
+                <th>Completion</th>
+                <th>Update Notes</th>
+              </tr>
+            </thead>
+            <tbody id="updateTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
