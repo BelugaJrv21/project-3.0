@@ -182,6 +182,13 @@ th {
 .high-priority-card h2 {
   color: #dc2626;
 }
+.search-box {
+  margin-bottom: 14px;
+}
+
+.search-box input {
+  margin-bottom: 0;
+}
 
 
 

@@ -89,8 +89,17 @@
       </div>
 
       <div class="card">
-        <h2>Task List</h2>
-        <table>
+  <h2>Task List</h2>
+
+  <div class="search-box">
+    <input
+      id="taskSearch"
+      placeholder="Search tasks by name, description, owner, status, priority or deadline"
+      oninput="renderTasks()"
+    />
+  </div>
+
+  <table>
           <thead>
             <tr>
               <th>Task</th>
@@ -114,9 +123,16 @@
         <button class="primary" onclick="addGoal()">Add Goal</button>
       </div>
 
-      <div class="card">
+       <div class="card">
         <h2>Today's Goals</h2>
-        <table>
+        <div class="search-box">
+         <input
+  id="goalSearch"
+  placeholder="Search goals by goal text or date"
+  oninput="renderGoals()"
+/>
+       </div>
+       <table>
           <thead>
             <tr>
               <th>Goal</th>
@@ -140,6 +156,13 @@
 
       <div class="card">
         <h2>Daily Work History</h2>
+        <div class="search-box">
+  <input
+    id="updateSearch"
+    placeholder="Search updates by task, date, completion or notes"
+    oninput="renderUpdates()"
+  />
+</div>
         <table>
           <thead>
             <tr>

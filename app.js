@@ -208,9 +208,27 @@ function renderTasks() {
   const taskTable = document.getElementById("taskTable");
   taskTable.innerHTML = "";
 
+  const searchText = document
+    .getElementById("taskSearch")
+    .value
+    .toLowerCase();
+
   const sortedTasks = getSortedTasks();
 
-  sortedTasks.forEach(task => {
+  const filteredTasks = sortedTasks.filter(task => {
+    const priority = task.priority || "Low";
+
+    return (
+      task.name.toLowerCase().includes(searchText) ||
+      (task.description || "").toLowerCase().includes(searchText) ||
+      (task.owner || "").toLowerCase().includes(searchText) ||
+      (task.deadline || "").toLowerCase().includes(searchText) ||
+      (task.status || "").toLowerCase().includes(searchText) ||
+      priority.toLowerCase().includes(searchText)
+    );
+  });
+
+  filteredTasks.forEach(task => {
     const priority = task.priority || "Low";
 
     taskTable.innerHTML += `
@@ -243,7 +261,20 @@ function renderGoals() {
   const goalTable = document.getElementById("goalTable");
   goalTable.innerHTML = "";
 
-  goals.forEach(goal => {
+  const goalSearchInput = document.getElementById("goalSearch");
+
+  const searchText = goalSearchInput
+    ? goalSearchInput.value.toLowerCase()
+    : "";
+
+  const filteredGoals = goals.filter(goal => {
+    return (
+      goal.text.toLowerCase().includes(searchText) ||
+      goal.date.toLowerCase().includes(searchText)
+    );
+  });
+
+  filteredGoals.forEach(goal => {
     goalTable.innerHTML += `
       <tr>
         <td>${goal.text}</td>
@@ -257,7 +288,6 @@ function renderGoals() {
     `;
   });
 }
-
 function renderUpdates() {
   const updateTask = document.getElementById("updateTask");
   updateTask.innerHTML = '<option value="">Select task</option>';
