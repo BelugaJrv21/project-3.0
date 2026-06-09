@@ -91,6 +91,257 @@ button.danger {
   cursor: pointer;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f9fafb;
+}
+
+.progress-bar {
+  background: #e5e7eb;
+  border-radius: 10px;
+  height: 18px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: #22c55e;
+  height: 100%;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.small-text {
+  color: #666;
+  font-size: 13px;
+}
+
+.priority {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+.priority.high {
+  background: #dc2626;
+}
+
+.priority.medium {
+  background: #f59e0b;
+}
+
+.priority.low {
+  background: #22c55e;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f8;
+  color: #222;
+}
+
+header {
+  background: #1f2937;
+  color: white;
+  padding: 18px 24px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.tabs {
+  display: flex;
+  background: #111827;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.tabs button.active {
+  background: #2563eb;
+}
+
+.container {
+  padding: 24px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 18px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 80px;
+}
+
+button.primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button.danger {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 button.primary:hover,
 button.danger:hover,
 .tabs button:hover {
@@ -165,4 +416,4 @@ th {
   td {
     padding: 10px;
   }
-}
+}*/
