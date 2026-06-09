@@ -138,12 +138,16 @@ function renderDashboard() {
           </span>
         </td>
         <td>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:${task.completion}%">
-              ${task.completion}%
-            </div>
-          </div>
-        </td>
+  <div class="progress-bar">
+    <div class="progress-fill"
+         style="width:${task.completion}%">
+    </div>
+
+    <div class="progress-label">
+      ${task.completion}%
+    </div>
+  </div>
+</td>
       </tr>
     `;
   });
