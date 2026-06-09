@@ -7,7 +7,20 @@ function saveData() {
   localStorage.setItem("goals", JSON.stringify(goals));
   localStorage.setItem("updates", JSON.stringify(updates));
 }
+function getSortedTasks() {
+  const priorityOrder = {
+    High: 1,
+    Medium: 2,
+    Low: 3
+  };
 
+  return [...tasks].sort((a, b) => {
+    const priorityA = priorityOrder[a.priority || "Low"];
+    const priorityB = priorityOrder[b.priority || "Low"];
+
+    return priorityA - priorityB;
+  });
+}
 function openTab(tabId) {
   document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
@@ -120,10 +133,14 @@ function addUpdate() {
 }
 
 function renderDashboard() {
-  const dashboardTable = document.getElementById("dashboardTable");
+  const dashboardTable =
+    document.getElementById("dashboardTable");
+
   dashboardTable.innerHTML = "";
 
-  tasks.forEach(task => {
+  const sortedTasks = getSortedTasks();
+
+  sortedTasks.forEach(task => {
     const priority = task.priority || "Low";
 
     dashboardTable.innerHTML += `
@@ -154,7 +171,15 @@ function renderDashboard() {
 
   document.getElementById("totalTasks").innerText = tasks.length;
   document.getElementById("totalGoals").innerText = goals.length;
+  const highPriorityCount =
+  tasks.filter(task =>
+    task.priority === "High" &&
+    task.status !== "Completed"
+  ).length;
 
+document.getElementById(
+  "highPriorityCount"
+).innerText = highPriorityCount;
   const average = tasks.length
     ? Math.round(tasks.reduce((sum, task) => sum + Number(task.completion), 0) / tasks.length)
     : 0;
@@ -163,10 +188,14 @@ function renderDashboard() {
 }
 
 function renderTasks() {
-  const taskTable = document.getElementById("taskTable");
+  const taskTable =
+    document.getElementById("taskTable");
+
   taskTable.innerHTML = "";
 
-  tasks.forEach(task => {
+  const sortedTasks = getSortedTasks();
+
+  sortedTasks.forEach(task => {
     const priority = task.priority || "Low";
 
     taskTable.innerHTML += `
@@ -214,13 +243,15 @@ function renderUpdates() {
   const updateTask = document.getElementById("updateTask");
   updateTask.innerHTML = '<option value="">Select task</option>';
 
-  tasks.forEach(task => {
-    updateTask.innerHTML += `
-      <option value="${task.id}">
-        ${task.name}
-      </option>
-    `;
-  });
+  const sortedTasks = getSortedTasks();
+
+sortedTasks.forEach(task => {
+  updateTask.innerHTML += `
+    <option value="${task.id}">
+      [${task.priority}] ${task.name}
+    </option>
+  `;
+});
 
   const updateTable = document.getElementById("updateTable");
   updateTable.innerHTML = "";

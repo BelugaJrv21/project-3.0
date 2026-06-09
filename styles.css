@@ -167,6 +167,13 @@ th {
 .priority.low {
   background: #22c55e;
 }
+.high-priority-card {
+  border-left: 6px solid #dc2626;
+}
+
+.high-priority-card h2 {
+  color: #dc2626;
+}
 
 
 
