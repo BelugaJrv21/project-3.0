@@ -68,7 +68,24 @@ function deleteTask(id) {
   saveData();
   renderAll();
 }
+function editTask(id) {
+  const task = tasks.find(task => task.id === id);
 
+  if (!task) {
+    return;
+  }
+
+  document.getElementById("taskName").value = task.name;
+  document.getElementById("taskDescription").value = task.description;
+  document.getElementById("taskOwner").value = task.owner;
+  document.getElementById("taskDeadline").value = task.deadline;
+  document.getElementById("taskStatus").value = task.status;
+  document.getElementById("taskPriority").value = task.priority || "Low";
+
+  deleteTask(id);
+
+  openTab("tasks");
+}
 function addGoal() {
   const goal = document.getElementById("goalText").value.trim();
 
@@ -188,9 +205,7 @@ document.getElementById(
 }
 
 function renderTasks() {
-  const taskTable =
-    document.getElementById("taskTable");
-
+  const taskTable = document.getElementById("taskTable");
   taskTable.innerHTML = "";
 
   const sortedTasks = getSortedTasks();
@@ -211,6 +226,10 @@ function renderTasks() {
           </span>
         </td>
         <td>
+          <button class="edit" onclick="editTask(${task.id})">
+            Edit
+          </button>
+
           <button class="danger" onclick="deleteTask(${task.id})">
             Delete
           </button>

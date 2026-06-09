@@ -90,7 +90,15 @@ button.danger {
   border-radius: 6px;
   cursor: pointer;
 }
-
+button.edit {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 6px;
+}
 table {
   width: 100%;
   border-collapse: collapse;
