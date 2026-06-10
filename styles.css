@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background: #f4f6f8;
+  background:linear-gradient(135deg, #eef2ff, #f8fafc, #ecfeff);
   color: #222;
 }
 
@@ -303,7 +303,85 @@ button.edit:hover,
 button.danger:hover {
   transform: scale(1.04);
 }
+.study-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
 
+.study-background span {
+  position: absolute;
+  font-size: 42px;
+  opacity: 0.12;
+  animation: floatStudy 12s infinite ease-in-out;
+}
+
+.study-background span:nth-child(1) {
+  top: 12%;
+  left: 8%;
+  animation-delay: 0s;
+}
+
+.study-background span:nth-child(2) {
+  top: 28%;
+  left: 80%;
+  animation-delay: 2s;
+}
+
+.study-background span:nth-child(3) {
+  top: 65%;
+  left: 12%;
+  animation-delay: 4s;
+}
+
+.study-background span:nth-child(4) {
+  top: 75%;
+  left: 75%;
+  animation-delay: 1s;
+}
+
+.study-background span:nth-child(5) {
+  top: 45%;
+  left: 50%;
+  animation-delay: 3s;
+}
+
+.study-background span:nth-child(6) {
+  top: 10%;
+  left: 55%;
+  animation-delay: 5s;
+}
+
+.study-background span:nth-child(7) {
+  top: 85%;
+  left: 35%;
+  animation-delay: 6s;
+}
+
+.study-background span:nth-child(8) {
+  top: 55%;
+  left: 90%;
+  animation-delay: 7s;
+}
+
+@keyframes floatStudy {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-25px) rotate(8deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
 
 
 
