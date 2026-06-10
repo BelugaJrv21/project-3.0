@@ -53,15 +53,19 @@ function addTask() {
   }
 
   tasks.push({
-    id: Date.now(),
-    name: name,
-    description: document.getElementById("taskDescription").value.trim(),
-    owner: document.getElementById("taskOwner").value.trim(),
-    deadline: document.getElementById("taskDeadline").value,
-    status: document.getElementById("taskStatus").value,
-    priority: document.getElementById("taskPriority").value,
-    completion: 0
-  });
+  id: Date.now(),
+  name: name,
+  description: document.getElementById("taskDescription").value.trim(),
+  owner: document.getElementById("taskOwner").value.trim(),
+  deadline: document.getElementById("taskDeadline").value,
+  status: document.getElementById("taskStatus").value,
+  priority: document.getElementById("taskPriority").value,
+  completion: 0,
+  aiBreakdown: generateTaskBreakdown(
+    name,
+    document.getElementById("taskPriority").value
+  )
+});
 
   document.getElementById("taskName").value = "";
   document.getElementById("taskDescription").value = "";
@@ -234,6 +238,19 @@ function getTaskProgressHistory(taskId) {
     .slice()
     .reverse();
 }
+function generateTaskBreakdown(taskName, priority) {
+  return [
+    `Clarify the final outcome for "${taskName}".`,
+    "List all information, tools, or people needed.",
+    "Break the task into smaller actions.",
+    "Start with the easiest action to build momentum.",
+    "Work on the most important part of the task.",
+    priority === "High"
+      ? "Handle this task early because it is high priority."
+      : "Schedule a suitable time to continue this task.",
+    "Review the completed work and update the progress percentage."
+  ];
+}
 
 function renderTasks() {
   const taskTable = document.getElementById("taskTable");
@@ -276,51 +293,72 @@ function renderTasks() {
       }">
 
         <td>
-          <strong>${task.name}</strong>
 
-          ${
-            taskHistory.length > 0
-              ? `
-                <div class="progress-history">
+  <strong>${task.name}</strong>
 
-                  <div class="progress-history-title">
-                    Progress History
-                  </div>
+  ${
+    taskHistory.length > 0
+      ? `
+        <div class="progress-history">
 
-                  ${taskHistory
-                    .map(update => `
-                      <div class="progress-history-item">
+          <div class="progress-history-title">
+            Progress History
+          </div>
 
-                        <span class="progress-history-date">
-                          ${update.date}
-                        </span>
+          ${taskHistory
+            .map(update => `
+              <div class="progress-history-item">
 
-                        -
+                <span class="progress-history-date">
+                  ${update.date}
+                </span>
 
-                        <span class="progress-history-percent">
-                          ${update.percent}%
-                        </span>
+                -
 
-                        <br>
+                <span class="progress-history-percent">
+                  ${update.percent}%
+                </span>
 
-                        ${update.notes || "-"}
+                <br>
 
-                      </div>
-                    `)
-                    .join("")}
+                ${update.notes || "-"}
 
-                </div>
-              `
-              : `
-                <div class="progress-history">
-                  <div class="progress-history-title">
-                    No Progress Updates Yet
-                  </div>
-                </div>
-              `
-          }
+              </div>
+            `)
+            .join("")}
 
-        </td>
+        </div>
+      `
+      : `
+        <div class="progress-history">
+          <div class="progress-history-title">
+            No Progress Updates Yet
+          </div>
+        </div>
+      `
+  }
+
+  ${
+    task.aiBreakdown
+      ? `
+        <div class="ai-breakdown">
+
+          <div class="ai-breakdown-title">
+            AI Task Breakdown
+          </div>
+
+          <ol>
+            ${task.aiBreakdown
+              .map(step => `<li>${step}</li>`)
+              .join("")}
+          </ol>
+
+        </div>
+      `
+      : ""
+  }
+
+</td>
 
         <td>${task.description || "-"}</td>
 
