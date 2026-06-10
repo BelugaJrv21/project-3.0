@@ -189,7 +189,31 @@ th {
 .search-box input {
   margin-bottom: 0;
 }
+.overdue-row {
+  background-color: #fef2f2;
+}
 
+.overdue-row td {
+  color: #991b1b;
+}
+
+.overdue-high-row {
+  background-color: #fee2e2;
+  font-weight: bold;
+}
+
+.overdue-high-row td {
+  color: #7f1d1d;
+}
+
+.overdue-badge {
+  background: #dc2626;
+  color: white;
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+}
 
 
 

@@ -21,6 +21,19 @@ function getSortedTasks() {
     return priorityA - priorityB;
   });
 }
+function isOverdue(task) {
+  if (!task.deadline || task.status === "Completed") {
+    return false;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const deadline = new Date(task.deadline);
+  deadline.setHours(0, 0, 0, 0);
+
+  return deadline < today;
+}
 function openTab(tabId) {
   document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
@@ -161,15 +174,27 @@ function renderDashboard() {
     const priority = task.priority || "Low";
 
     dashboardTable.innerHTML += `
-      <tr>
+      <tr class="${
+  isOverdue(task)
+    ? priority === "High"
+      ? "overdue-high-row"
+      : "overdue-row"
+    : ""
+}">
         <td>${task.name}</td>
         <td>${task.owner || "-"}</td>
         <td>${task.deadline || "-"}</td>
         <td>${task.status}</td>
         <td>
           <span class="priority ${priority.toLowerCase()}">
-            ${priority}
-          </span>
+  ${priority}
+</span>
+
+${
+  isOverdue(task)
+    ? '<span class="overdue-badge">OVERDUE</span>'
+    : ""
+}
         </td>
         <td>
   <div class="progress-bar">
@@ -232,7 +257,13 @@ function renderTasks() {
     const priority = task.priority || "Low";
 
     taskTable.innerHTML += `
-      <tr>
+      <tr class="${
+  isOverdue(task)
+    ? priority === "High"
+      ? "overdue-high-row"
+      : "overdue-row"
+    : ""
+}">
         <td>${task.name}</td>
         <td>${task.description || "-"}</td>
         <td>${task.owner || "-"}</td>
