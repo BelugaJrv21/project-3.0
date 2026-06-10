@@ -228,6 +228,12 @@ document.getElementById(
 
   document.getElementById("averageCompletion").innerText = average + "%";
 }
+function getTaskProgressHistory(taskId) {
+  return updates
+    .filter(update => update.taskId === taskId)
+    .slice()
+    .reverse();
+}
 
 function renderTasks() {
   const taskTable = document.getElementById("taskTable");
@@ -254,35 +260,110 @@ function renderTasks() {
   });
 
   filteredTasks.forEach(task => {
+
     const priority = task.priority || "Low";
+
+    const taskHistory =
+      getTaskProgressHistory(task.id);
 
     taskTable.innerHTML += `
       <tr class="${
-  isOverdue(task)
-    ? priority === "High"
-      ? "overdue-high-row"
-      : "overdue-row"
-    : ""
-}">
-        <td>${task.name}</td>
-        <td>${task.description || "-"}</td>
-        <td>${task.owner || "-"}</td>
-        <td>${task.deadline || "-"}</td>
-        <td>${task.status}</td>
+        isOverdue(task)
+          ? priority === "High"
+            ? "overdue-high-row"
+            : "overdue-row"
+          : ""
+      }">
+
         <td>
+          <strong>${task.name}</strong>
+
+          ${
+            taskHistory.length > 0
+              ? `
+                <div class="progress-history">
+
+                  <div class="progress-history-title">
+                    Progress History
+                  </div>
+
+                  ${taskHistory
+                    .map(update => `
+                      <div class="progress-history-item">
+
+                        <span class="progress-history-date">
+                          ${update.date}
+                        </span>
+
+                        -
+
+                        <span class="progress-history-percent">
+                          ${update.percent}%
+                        </span>
+
+                        <br>
+
+                        ${update.notes || "-"}
+
+                      </div>
+                    `)
+                    .join("")}
+
+                </div>
+              `
+              : `
+                <div class="progress-history">
+                  <div class="progress-history-title">
+                    No Progress Updates Yet
+                  </div>
+                </div>
+              `
+          }
+
+        </td>
+
+        <td>${task.description || "-"}</td>
+
+        <td>${task.owner || "-"}</td>
+
+        <td>${task.deadline || "-"}</td>
+
+        <td>${task.status}</td>
+
+        <td>
+
           <span class="priority ${priority.toLowerCase()}">
             ${priority}
           </span>
+
+          ${
+            isOverdue(task)
+              ? `
+                <span class="overdue-badge">
+                  OVERDUE
+                </span>
+              `
+              : ""
+          }
+
         </td>
+
         <td>
-          <button class="edit" onclick="editTask(${task.id})">
+
+          <button
+            class="edit"
+            onclick="editTask(${task.id})">
             Edit
           </button>
 
-          <button class="danger" onclick="deleteTask(${task.id})">
+          <button
+            class="danger"
+            onclick="deleteTask(${task.id})">
             Delete
           </button>
+
         </td>
+
       </tr>
     `;
   });
