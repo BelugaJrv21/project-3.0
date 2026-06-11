@@ -605,7 +605,30 @@ button.danger:hover {
   cursor: pointer;
   color: #888;
 }
+.journal-fab {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #6fc7c0;
+  color: #0f1c24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
 
+.journal-fab:hover {
+  background: #3c8a83;
+  color: #fff;
+  transform: scale(1.05);
+}
 
 
 

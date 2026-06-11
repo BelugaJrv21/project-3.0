@@ -877,6 +877,104 @@ renderAll();
   });
 })();
 
+let journalEntries = JSON.parse(localStorage.getItem("journalEntries")) || [];
+
+function saveJournal() {
+  localStorage.setItem("journalEntries", JSON.stringify(journalEntries));
+}
+
+(function(){
+  const toggleBtn = document.getElementById('journalToggle');
+  const modal = document.getElementById('journalModal');
+  const closeBtn = document.getElementById('journalClose');
+  const saveBtn = document.getElementById('journalSave');
+  const entryText = document.getElementById('journalEntryText');
+  const entriesContainer = document.getElementById('journalEntries');
+  const searchInput = document.getElementById('journalSearch');
+  const jTabs = document.querySelectorAll('.journal-tabs .tab-btn');
+  const writeTab = document.getElementById('journalWrite');
+  const historyTab = document.getElementById('journalHistory');
+
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener('click', () => {
+    modal.classList.add('open');
+    renderJournalEntries();
+  });
+
+  closeBtn.addEventListener('click', () => modal.classList.remove('open'));
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.remove('open');
+  });
+
+  jTabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      jTabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.dataset.jtab;
+      writeTab.classList.toggle('active', target === 'write');
+      historyTab.classList.toggle('active', target === 'history');
+      if (target === 'history') renderJournalEntries();
+    });
+  });
+
+  saveBtn.addEventListener('click', () => {
+    const text = entryText.value.trim();
+    if (!text) {
+      alert("Please write something before saving.");
+      return;
+    }
+
+    const now = new Date();
+    journalEntries.push({
+      id: Date.now(),
+      text: text,
+      date: now.toLocaleDateString(),
+      time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+
+    saveJournal();
+    entryText.value = "";
+    alert("Entry saved.");
+  });
+
+  searchInput.addEventListener('input', renderJournalEntries);
+
+  function deleteJournalEntry(id) {
+    journalEntries = journalEntries.filter(e => e.id !== id);
+    saveJournal();
+    renderJournalEntries();
+  }
+  window.deleteJournalEntry = deleteJournalEntry;
+
+  function renderJournalEntries() {
+    const searchText = (searchInput.value || "").toLowerCase();
+
+    const filtered = journalEntries
+      .filter(e =>
+        e.text.toLowerCase().includes(searchText) ||
+        e.date.toLowerCase().includes(searchText)
+      )
+      .slice()
+      .reverse();
+
+    if (filtered.length === 0) {
+      entriesContainer.innerHTML = '<p class="small-text">No entries found.</p>';
+      return;
+    }
+
+    entriesContainer.innerHTML = filtered.map(entry => `
+      <div class="journal-entry-card">
+        <div class="journal-entry-date">${entry.date} · ${entry.time}</div>
+        <p class="journal-entry-text">${entry.text.replace(/</g, "&lt;")}</p>
+        <div class="journal-entry-actions">
+          <button class="danger" onclick="deleteJournalEntry(${entry.id})">Delete</button>
+        </div>
+      </div>
+    `).join("");
+  }
+})();
 
 
 
