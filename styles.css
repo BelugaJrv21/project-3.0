@@ -417,8 +417,11 @@ button.danger:hover {
 .ai-breakdown li {
   margin-bottom: 5px;
 }
-
-
+.ai-breakdown pre {
+  white-space: pre-wrap;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
 
 
 

@@ -44,40 +44,119 @@ function openTab(tabId) {
   renderAll();
 }
 
-function addTask() {
-  const name = document.getElementById("taskName").value.trim();
+function renderTasks() {
+  const taskTable = document.getElementById("taskTable");
+  taskTable.innerHTML = "";
 
-  if (!name) {
-    alert("Please enter a task name.");
-    return;
-  }
+  const taskSearchInput = document.getElementById("taskSearch");
 
-  tasks.push({
-  id: Date.now(),
-  name: name,
-  description: document.getElementById("taskDescription").value.trim(),
-  owner: document.getElementById("taskOwner").value.trim(),
-  deadline: document.getElementById("taskDeadline").value,
-  status: document.getElementById("taskStatus").value,
-  priority: document.getElementById("taskPriority").value,
-  completion: 0,
-  aiBreakdown: generateTaskBreakdown(
-    name,
-    document.getElementById("taskPriority").value
-  )
-});
+  const searchText = taskSearchInput
+    ? taskSearchInput.value.toLowerCase()
+    : "";
 
-  document.getElementById("taskName").value = "";
-  document.getElementById("taskDescription").value = "";
-  document.getElementById("taskOwner").value = "";
-  document.getElementById("taskDeadline").value = "";
-  document.getElementById("taskStatus").value = "Not Started";
-  document.getElementById("taskPriority").value = "Low";
+  const sortedTasks = getSortedTasks();
 
-  saveData();
-  renderAll();
+  const filteredTasks = sortedTasks.filter(task => {
+    const priority = task.priority || "Low";
+
+    return (
+      (task.name || "").toLowerCase().includes(searchText) ||
+      (task.description || "").toLowerCase().includes(searchText) ||
+      (task.owner || "").toLowerCase().includes(searchText) ||
+      (task.deadline || "").toLowerCase().includes(searchText) ||
+      (task.status || "").toLowerCase().includes(searchText) ||
+      priority.toLowerCase().includes(searchText)
+    );
+  });
+
+  filteredTasks.forEach(task => {
+    const priority = task.priority || "Low";
+    const taskHistory = getTaskProgressHistory(task.id);
+
+    taskTable.innerHTML += `
+      <tr class="${
+        isOverdue(task)
+          ? priority === "High"
+            ? "overdue-high-row"
+            : "overdue-row"
+          : ""
+      }">
+        <td>
+          <strong>${task.name}</strong>
+
+          ${
+            taskHistory.length > 0
+              ? `
+                <div class="progress-history">
+                  <div class="progress-history-title">
+                    Progress History
+                  </div>
+
+                  ${taskHistory
+                    .map(update => `
+                      <div class="progress-history-item">
+                        <span class="progress-history-date">
+                          ${update.date}
+                        </span>
+                        -
+                        <span class="progress-history-percent">
+                          ${update.percent}%
+                        </span>
+                        <br>
+                        ${update.notes || "-"}
+                      </div>
+                    `)
+                    .join("")}
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            task.aiBreakdown
+              ? `
+                <div class="ai-breakdown">
+                  <div class="ai-breakdown-title">
+                    AI Task Breakdown
+                  </div>
+
+                  <pre>${task.aiBreakdown}</pre>
+                </div>
+              `
+              : ""
+          }
+        </td>
+
+        <td>${task.description || "-"}</td>
+        <td>${task.owner || "-"}</td>
+        <td>${task.deadline || "-"}</td>
+        <td>${task.status || "-"}</td>
+
+        <td>
+          <span class="priority ${priority.toLowerCase()}">
+            ${priority}
+          </span>
+
+          ${
+            isOverdue(task)
+              ? '<span class="overdue-badge">OVERDUE</span>'
+              : ""
+          }
+        </td>
+
+        <td>
+          <button class="edit" onclick="editTask(${task.id})">
+            Edit
+          </button>
+
+          <button class="danger" onclick="deleteTask(${task.id})">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `;
+  });
 }
-
 function deleteTask(id) {
   tasks = tasks.filter(task => task.id !== id);
   updates = updates.filter(update => update.taskId !== id);
@@ -252,161 +331,79 @@ function generateTaskBreakdown(taskName, priority) {
   ];
 }
 
-function renderTasks() {
-  const taskTable = document.getElementById("taskTable");
-  taskTable.innerHTML = "";
+async function addTask() {
+  const name = document.getElementById("taskName").value.trim();
 
-  const searchText = document
-    .getElementById("taskSearch")
-    .value
-    .toLowerCase();
-
-  const sortedTasks = getSortedTasks();
-
-  const filteredTasks = sortedTasks.filter(task => {
-    const priority = task.priority || "Low";
-
-    return (
-      task.name.toLowerCase().includes(searchText) ||
-      (task.description || "").toLowerCase().includes(searchText) ||
-      (task.owner || "").toLowerCase().includes(searchText) ||
-      (task.deadline || "").toLowerCase().includes(searchText) ||
-      (task.status || "").toLowerCase().includes(searchText) ||
-      priority.toLowerCase().includes(searchText)
-    );
-  });
-
-  filteredTasks.forEach(task => {
-
-    const priority = task.priority || "Low";
-
-    const taskHistory =
-      getTaskProgressHistory(task.id);
-
-    taskTable.innerHTML += `
-      <tr class="${
-        isOverdue(task)
-          ? priority === "High"
-            ? "overdue-high-row"
-            : "overdue-row"
-          : ""
-      }">
-
-        <td>
-
-  <strong>${task.name}</strong>
-
-  ${
-    taskHistory.length > 0
-      ? `
-        <div class="progress-history">
-
-          <div class="progress-history-title">
-            Progress History
-          </div>
-
-          ${taskHistory
-            .map(update => `
-              <div class="progress-history-item">
-
-                <span class="progress-history-date">
-                  ${update.date}
-                </span>
-
-                -
-
-                <span class="progress-history-percent">
-                  ${update.percent}%
-                </span>
-
-                <br>
-
-                ${update.notes || "-"}
-
-              </div>
-            `)
-            .join("")}
-
-        </div>
-      `
-      : `
-        <div class="progress-history">
-          <div class="progress-history-title">
-            No Progress Updates Yet
-          </div>
-        </div>
-      `
+  if (!name) {
+    alert("Please enter a task name.");
+    return;
   }
 
-  ${
-    task.aiBreakdown
-      ? `
-        <div class="ai-breakdown">
+  const description = document.getElementById("taskDescription").value.trim();
+  const owner = document.getElementById("taskOwner").value.trim();
+  const deadline = document.getElementById("taskDeadline").value;
+  const status = document.getElementById("taskStatus").value;
+  const priority = document.getElementById("taskPriority").value;
 
-          <div class="ai-breakdown-title">
-            AI Task Breakdown
-          </div>
+  const newTask = {
+    id: Date.now(),
+    name: name,
+    description: description,
+    owner: owner,
+    deadline: deadline,
+    status: status,
+    priority: priority,
+    completion: 0,
+    aiBreakdown: "Generating AI task breakdown..."
+  };
 
-          <ol>
-            ${task.aiBreakdown
-              .map(step => `<li>${step}</li>`)
-              .join("")}
-          </ol>
+  tasks.push(newTask);
+  saveData();
+  renderAll();
 
-        </div>
-      `
-      : ""
+  document.getElementById("taskName").value = "";
+  document.getElementById("taskDescription").value = "";
+  document.getElementById("taskOwner").value = "";
+  document.getElementById("taskDeadline").value = "";
+  document.getElementById("taskStatus").value = "Not Started";
+  document.getElementById("taskPriority").value = "Low";
+
+  try {
+    const response = await fetch("http://localhost:3000/generate-task-breakdown", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        taskName: name,
+        taskDescription: description,
+        priority: priority,
+        deadline: deadline
+      })
+    });
+
+    const data = await response.json();
+
+    const task = tasks.find(task => task.id === newTask.id);
+
+    if (task) {
+      task.aiBreakdown = data.breakdown || "AI breakdown could not be generated.";
+      saveData();
+      renderAll();
+    }
+
+  } catch (error) {
+    console.error("AI generation failed:", error);
+
+    const task = tasks.find(task => task.id === newTask.id);
+
+    if (task) {
+      task.aiBreakdown = "AI breakdown failed. Please check if backend server is running.";
+      saveData();
+      renderAll();
+    }
   }
-
-</td>
-
-        <td>${task.description || "-"}</td>
-
-        <td>${task.owner || "-"}</td>
-
-        <td>${task.deadline || "-"}</td>
-
-        <td>${task.status}</td>
-
-        <td>
-
-          <span class="priority ${priority.toLowerCase()}">
-            ${priority}
-          </span>
-
-          ${
-            isOverdue(task)
-              ? `
-                <span class="overdue-badge">
-                  OVERDUE
-                </span>
-              `
-              : ""
-          }
-
-        </td>
-
-        <td>
-
-          <button
-            class="edit"
-            onclick="editTask(${task.id})">
-            Edit
-          </button>
-
-          <button
-            class="danger"
-            onclick="deleteTask(${task.id})">
-            Delete
-          </button>
-
-        </td>
-
-      </tr>
-    `;
-  });
 }
-
 function renderGoals() {
   const goalTable = document.getElementById("goalTable");
   goalTable.innerHTML = "";
