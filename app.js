@@ -975,8 +975,152 @@ function saveJournal() {
     `).join("");
   }
 })();
+let moodLogs = JSON.parse(localStorage.getItem("moodLogs")) || [];
 
+function saveMoodLogs() {
+  localStorage.setItem("moodLogs", JSON.stringify(moodLogs));
+}
 
+(function(){
+  const moodScale = document.getElementById('moodScale');
+  const moodNote = document.getElementById('moodNote');
+  const moodSaveBtn = document.getElementById('moodSave');
+  const moodSavedMsg = document.getElementById('moodSavedMsg');
+  const moodTable = document.getElementById('moodTable');
+  const moodSearch = document.getElementById('moodSearch');
+  const heatmapGrid = document.getElementById('heatmapGrid');
+
+  if (!moodScale) return;
+
+  let selectedMood = null;
+  const moodEmojis = { 1: "😞", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
+
+  moodScale.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedMood = Number(btn.dataset.mood);
+      moodScale.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  moodSaveBtn.addEventListener('click', () => {
+    if (!selectedMood) {
+      alert("Please select a mood first.");
+      return;
+    }
+
+    const now = new Date();
+    moodLogs.push({
+      id: Date.now(),
+      score: selectedMood,
+      note: moodNote.value.trim(),
+      date: now.toLocaleDateString(),
+      time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isoDate: `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
+    });
+
+    saveMoodLogs();
+
+    selectedMood = null;
+    moodScale.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+    moodNote.value = "";
+
+    moodSavedMsg.style.display = "block";
+    setTimeout(() => { moodSavedMsg.style.display = "none"; }, 1500);
+
+    renderMoodAll();
+  });
+
+  moodSearch.addEventListener('input', renderMoodTable);
+
+  function deleteMoodLog(id) {
+    moodLogs = moodLogs.filter(m => m.id !== id);
+    saveMoodLogs();
+    renderMoodAll();
+  }
+  window.deleteMoodLog = deleteMoodLog;
+
+  function renderMoodTable() {
+    const searchText = (moodSearch.value || "").toLowerCase();
+
+    const filtered = moodLogs
+      .filter(m =>
+        m.date.toLowerCase().includes(searchText) ||
+        (m.note || "").toLowerCase().includes(searchText)
+      )
+      .slice()
+      .reverse();
+
+    if (filtered.length === 0) {
+      moodTable.innerHTML = '<tr><td colspan="5" class="small-text">No entries found.</td></tr>';
+      return;
+    }
+
+    moodTable.innerHTML = filtered.map(m => `
+      <tr>
+        <td>${m.date}</td>
+        <td>${m.time}</td>
+        <td>${moodEmojis[m.score]} (${m.score})</td>
+        <td>${(m.note || "-").replace(/</g, "&lt;")}</td>
+        <td><button class="danger" onclick="deleteMoodLog(${m.id})">Delete</button></td>
+      </tr>
+    `).join("");
+  }
+
+  function renderHeatmap() {
+    heatmapGrid.innerHTML = "";
+
+    // Build a map of isoDate -> latest mood score for that day
+    const dayScores = {};
+    moodLogs.forEach(m => {
+      dayScores[m.isoDate] = m.score; // last entry of the day wins
+    });
+
+    // Show last 182 days (~6 months), oldest first
+    const days = 182;
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+      const score = dayScores[iso];
+      const cell = document.createElement('div');
+      cell.className = 'heatmap-cell ' + (score ? `score-${score}` : 'score-none');
+
+      const label = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      cell.dataset.tooltip = score
+        ? `${label}: ${moodEmojis[score]} (${score})`
+        : `${label}: No entry`;
+
+      heatmapGrid.appendChild(cell);
+    }
+  }
+
+  function renderMoodAll() {
+    renderMoodTable();
+    renderHeatmap();
+  }
+
+  // Hook into existing renderAll if present
+  const originalRenderAll = window.renderAll;
+  window.renderAll = function() {
+    if (originalRenderAll) originalRenderAll();
+    renderMoodAll();
+  };
+
+  renderMoodAll();
+})();
+const logs = JSON.parse(localStorage.getItem("moodLogs") || "[]");
+const fixed = logs.map(m => {
+  const d = new Date(m.id); // id is Date.now() = timestamp
+  const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  return { ...m, isoDate: iso };
+});
+localStorage.setItem("moodLogs", JSON.stringify(fixed));
+console.log("Fixed:", fixed);
 
 
 

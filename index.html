@@ -29,7 +29,8 @@
     <button class="tab-btn" onclick="openTab('goals')">Goals for Today</button>
     <button class="tab-btn" onclick="openTab('updates')">Daily Work Update</button>
     <button class="tab-btn" onclick="openTab('regulation')">Regulation</button>
-    
+     <button class="tab-btn" onclick="openTab('habits')">Habits</button>
+
   </div>
 
 
@@ -283,6 +284,61 @@
     </div>
   </div>
 
+</section>
+<section id="habits" class="tab-content">
+  <div class="card">
+    <h2>Daily Mood Check-in</h2>
+    <p class="small-text">How are you feeling right now?</p>
+
+    <div class="mood-scale" id="moodScale">
+      <button class="mood-btn" data-mood="1">😞</button>
+      <button class="mood-btn" data-mood="2">😕</button>
+      <button class="mood-btn" data-mood="3">😐</button>
+      <button class="mood-btn" data-mood="4">🙂</button>
+      <button class="mood-btn" data-mood="5">😄</button>
+    </div>
+
+    <input id="moodNote" placeholder="Optional one-line note..." />
+    <button class="primary" id="moodSave">Log Mood</button>
+    <p class="small-text" id="moodSavedMsg" style="display:none; color:#22c55e; font-weight:bold;">Logged ✓</p>
+  </div>
+
+  <div class="card">
+    <h2>Stress Heatmap</h2>
+    <p class="small-text">Each square = one day. Darker = higher stress (lower mood score).</p>
+
+    <div class="heatmap-legend">
+      <span>Low stress</span>
+      <span class="legend-box score-5"></span>
+      <span class="legend-box score-4"></span>
+      <span class="legend-box score-3"></span>
+      <span class="legend-box score-2"></span>
+      <span class="legend-box score-1"></span>
+      <span class="legend-box score-none"></span>
+      <span>High stress / no entry</span>
+    </div>
+
+    <div class="heatmap-grid" id="heatmapGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Mood History</h2>
+    <div class="search-box">
+      <input id="moodSearch" placeholder="Search by date or note" />
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Mood</th>
+          <th>Note</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="moodTable"></tbody>
+    </table>
+  </div>
 </section>
   </div>
 
