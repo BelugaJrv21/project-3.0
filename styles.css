@@ -422,8 +422,189 @@ button.danger:hover {
   font-family: Arial, sans-serif;
   margin: 0;
 }
+.breath-card {
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
 
+.pattern-tabs {
+  display: flex;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 4px;
+  margin: 16px 0 24px;
+}
 
+.ring-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-outline {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px dashed #ccc;
+}
+
+.ring {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(111,199,192,0.18);
+  border: 2px solid #6fc7c0;
+  transform: scale(0.45);
+  transition: transform 4s linear;
+  will-change: transform;
+}
+
+.ring.pulse {
+  animation: pulseAnim 1s ease-in-out infinite;
+}
+
+@keyframes pulseAnim {
+  0%, 100% { transform: scale(var(--pulse-base)); }
+  50% { transform: scale(calc(var(--pulse-base) * 1.06)); }
+}
+
+.center-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.phase-label {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.countdown {
+  font-size: 36px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #6fc7c0;
+  width: 0%;
+  transition: width 1s linear;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 18px;
+}
+
+.breath-card .controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.ambient-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.ambient-toggle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #6fc7c0;
+  color: #0f1c24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.ambient-toggle.active {
+  background: #3c8a83;
+  color: #fff;
+}
+
+.ambient-panel {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  position: absolute;
+  bottom: 56px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  width: 170px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.ambient-panel.open {
+  display: flex;
+}
+
+.ambient-option {
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ambient-option.playing {
+  background: #6fc7c0;
+  color: #0f1c24;
+  border-color: #6fc7c0;
+  font-weight: 600;
+}
+
+.ambient-volume-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.ambient-stop {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #888;
+}
 
 
 

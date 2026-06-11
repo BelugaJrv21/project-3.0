@@ -28,7 +28,10 @@
     <button class="tab-btn" onclick="openTab('tasks')">Tasks</button>
     <button class="tab-btn" onclick="openTab('goals')">Goals for Today</button>
     <button class="tab-btn" onclick="openTab('updates')">Daily Work Update</button>
+    <button class="tab-btn" onclick="openTab('regulation')">Regulation</button>
+    
   </div>
+
 
   <div class="container">
     <section id="dashboard" class="tab-content active">
@@ -186,6 +189,64 @@
         </table>
       </div>
     </section>
+    <section id="regulation" class="tab-content">
+  <div class="card breath-card">
+    <h2>Take a moment to breathe</h2>
+    <p class="small-text">Pick a pattern, press start, and follow the ring</p>
+
+    <div class="pattern-tabs">
+      <button class="tab-btn active" data-pattern="box">Box breathing</button>
+      <button class="tab-btn" data-pattern="478">4-7-8</button>
+    </div>
+
+    <div class="ring-wrap">
+      <div class="ring-outline"></div>
+      <div class="ring" id="ring"></div>
+      <div class="center-content">
+        <div class="phase-label" id="phaseLabel">Ready</div>
+        <div class="countdown" id="countdown">--</div>
+      </div>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="meta-row">
+      <span id="cycleCount">Cycle 0</span>
+      <span id="patternName">Box breathing · 4-4-4-4</span>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="startBtn">Start</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+
+    <p class="small-text" id="patternDesc">
+      Inhale for 4, hold for 4, exhale for 4, hold for 4. Used by Navy SEALs and
+      widely recommended for calming the nervous system before stressful moments.
+    </p>
+  </div>
+  <div class="ambient-widget" id="ambientWidget">
+  <button class="ambient-toggle" id="ambientToggle" aria-label="Ambient sounds">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+    </svg>
+  </button>
+  <div class="ambient-panel" id="ambientPanel">
+    <button class="ambient-option" data-sound="rain">Rain</button>
+    <button class="ambient-option" data-sound="brown">Brown noise</button>
+    <button class="ambient-option" data-sound="ocean">Ocean</button>
+    <button class="ambient-option" data-sound="forest">Forest</button>
+    <div class="ambient-volume-row">
+      <label for="ambientVolume">Volume</label>
+      <input type="range" id="ambientVolume" min="0" max="100" value="50" />
+    </div>
+    <button class="ambient-stop" id="ambientStop">Stop</button>
+  </div>
+</div>
+</section>
   </div>
 
   <script src="app.js"></script>
