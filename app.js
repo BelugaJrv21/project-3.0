@@ -1068,36 +1068,38 @@ function saveMoodLogs() {
   }
 
   function renderHeatmap() {
-    heatmapGrid.innerHTML = "";
+  heatmapGrid.innerHTML = "";
 
-    // Build a map of isoDate -> latest mood score for that day
-    const dayScores = {};
-    moodLogs.forEach(m => {
-      dayScores[m.isoDate] = m.score; // last entry of the day wins
-    });
+  // Build a map of isoDate -> latest mood score for that day
+  const dayScores = {};
+  moodLogs.forEach(m => {
+    dayScores[m.isoDate] = m.score; // last entry of the day wins
+  });
 
-    // Show last 182 days (~6 months), oldest first
-    const days = 182;
-    const today = new Date();
-    today.setHours(0,0,0,0);
+  // Start from the 1st of the current month, show 182 days forward
+  const today = new Date();
+  const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
-    for (let i = days - 1; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
-      const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const days = 182;
 
-      const score = dayScores[iso];
-      const cell = document.createElement('div');
-      cell.className = 'heatmap-cell ' + (score ? `score-${score}` : 'score-none');
+  for (let i = 0; i < days; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i);
 
-      const label = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-      cell.dataset.tooltip = score
-        ? `${label}: ${moodEmojis[score]} (${score})`
-        : `${label}: No entry`;
+    const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 
-      heatmapGrid.appendChild(cell);
-    }
+    const score = dayScores[iso];
+    const cell = document.createElement('div');
+    cell.className = 'heatmap-cell ' + (score ? `score-${score}` : 'score-none');
+
+    const label = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    cell.dataset.tooltip = score
+      ? `${label}: ${moodEmojis[score]} (${score})`
+      : `${label}: No entry`;
+
+    heatmapGrid.appendChild(cell);
   }
+}
 
   function renderMoodAll() {
     renderMoodTable();
